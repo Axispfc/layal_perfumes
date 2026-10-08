@@ -8,8 +8,9 @@
     "start": "next start --hostname 0.0.0.0",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "tsx --test tests/cart.test.ts",
-    "test:e2e": "playwright test"
+    "test": "tsx --test tests/cart.test.ts tests/official-catalog.test.ts",
+    "test:e2e": "playwright test",
+    "catalog:validate": "tsx scripts/validate-catalog.ts"
   },
   "repository": {
     "type": "git",

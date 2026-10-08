@@ -83,3 +83,9 @@ A análise de segurança e a pendência de desenvolvimento estão em [docs/SECUR
 ## Identidade visual aprovada
 
 A versão atual usa preto profundo `#080808`, dourado champagne `#C9A96E` e texto marfim `#F5F0E8`. Cabeçalho, catálogo, produto, carrinho e rodapé seguem o tema escuro. A home apresenta “Perfumes que deixam presença.” e o botão “DESCUBRA O SEU”. Carrinho, rotas e fixtures foram preservados; somente as asserções dos textos alterados na home foram ajustadas nos testes. Nenhum vídeo fictício ou fotografia oficial foi adicionado.
+
+## Cadastro do catálogo oficial
+
+A estrutura dos 21 cadastros está em `src/data/official-catalog.json`, inicialmente como rascunhos vazios. O catálogo público permanece demonstrativo até existir um oficial aprovado; então somente os oficiais publicados são exibidos, sem mistura com produtos fictícios. Fotos oficiais são servidas sem alteração em `public/images/products/`; fotos ausentes recebem um espaço reservado identificado. Filtros incluem a categoria unissex.
+
+Envie os dados usando [docs/catalogo-oficial-21.csv](docs/catalogo-oficial-21.csv) e as fotografias originais em ZIP, associadas aos IDs. Instruções completas em [docs/CATALOGO-OFICIAL.md](docs/CATALOGO-OFICIAL.md). Execute `npm run catalog:validate` antes de publicar cadastros. Não há pagamentos ou checkout nesta fase.

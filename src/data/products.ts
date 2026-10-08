@@ -1,9 +1,7 @@
-export type Category = "masculino" | "feminino" | "kits";
-export type Product = { id: string; slug: string; name: string; category: Category; priceCents: number; volume: string; family: string; notes: { top: string; heart: string; base: string }; color: string; bestseller: boolean; description: string; isDemo: true };
-// Entirely fictional fixtures. Replace through the catalog repository when official data arrives.
-export const products: Product[] = [
- {id:"demo-1",slug:"noite-do-deserto",name:"Noite do Deserto",category:"masculino",priceCents:28900,volume:"100 ml",family:"Amadeirado · Âmbar",notes:{top:"Bergamota",heart:"Madeiras",base:"Âmbar"},color:"amber",bestseller:true,description:"Uma composição fictícia que explora o encontro entre madeiras e acordes quentes. Criada apenas para demonstrar a experiência de compra." ,isDemo:true},
- {id:"demo-2",slug:"rosa-de-damasco",name:"Rosa de Damasco",category:"feminino",priceCents:32900,volume:"100 ml",family:"Floral · Oriental",notes:{top:"Mandarina",heart:"Rosa",base:"Almíscar"},color:"rose",bestseller:true,description:"Uma criação fictícia de inspiração floral, apresentada exclusivamente para ilustrar o catálogo e a página de produto.",isDemo:true},
- {id:"demo-3",slug:"oud-imperial",name:"Oud Imperial",category:"masculino",priceCents:38900,volume:"100 ml",family:"Amadeirado · Especiado",notes:{top:"Especiarias",heart:"Oud",base:"Sândalo"},color:"black",bestseller:true,description:"Uma fragrância fictícia com uma narrativa amadeirada. Nenhuma informação nesta demonstração representa um perfume oficial.",isDemo:true},
- {id:"demo-4",slug:"ritual-layal",name:"Ritual Layal",category:"kits",priceCents:45900,volume:"2 × 50 ml",family:"Kit · Descoberta",notes:{top:"Acordes cítricos",heart:"Acordes florais",base:"Acordes amadeirados"},color:"ivory",bestseller:true,description:"Kit fictício de descoberta, criado para demonstrar a categoria de conjuntos. Conteúdo, volumes e valores são ilustrativos.",isDemo:true},
-];
+import officialData from "./official-catalog.json";
+import {demoProducts} from "./demo-products";
+import {parseOfficialCatalog,selectPublicCatalog} from "@/lib/official-catalog";
+export type {Product,Category} from "./product-types";
+export const officialProducts=parseOfficialCatalog(officialData);
+export const products=selectPublicCatalog(officialProducts,demoProducts);
+export const catalogMode=officialProducts.length?"official":"demo";

@@ -1,6 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {sanitizeCart,subtotal} from '../src/lib/cart';
+import {sanitizeCart as sanitize,subtotal as total} from '../src/lib/cart';
+import {demoProducts} from '../src/data/demo-products';
+const sanitizeCart=(value:unknown)=>sanitize(value,demoProducts);
+const subtotal=(items:Parameters<typeof total>[0])=>total(items,demoProducts);
 test('ignores corrupt, unknown and invalid stored cart entries',()=>{
  assert.deepEqual(sanitizeCart(null),[]);
  assert.deepEqual(sanitizeCart([{id:'unknown',quantity:1},{id:'demo-1',quantity:-1},{id:'demo-2',quantity:1.5},null]),[]);
