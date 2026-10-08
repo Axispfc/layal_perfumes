@@ -21,7 +21,7 @@ test('category filtering and responsive layout',async({page})=>{
  await expect(page.getByRole('heading',{name:'Ritual Layal'})).toBeVisible();
  await page.goto('/');
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
- await page.getByRole('link',{name:'Descubra seu perfume'}).click();
+ await page.getByRole('link',{name:'DESCUBRA O SEU'}).click();
  await expect(page.getByRole('heading',{name:'Uma essência para cada história.'})).toBeVisible();
 });
 test('quiz placeholder and missing products',async({page})=>{
@@ -32,7 +32,7 @@ test('quiz placeholder and missing products',async({page})=>{
 });
 test('visual evidence of storefront pages',async({page},testInfo)=>{
  await page.goto('/');
- await expect(page.getByRole('heading',{name:'A essência do extraordinário.'})).toBeVisible();
+ await expect(page.getByRole('heading',{name:'Perfumes que deixam presença.'})).toBeVisible();
  await page.evaluate(()=>document.fonts.ready);
  await page.evaluate(()=>{if(document.activeElement instanceof HTMLElement) document.activeElement.blur();window.scrollTo(0,0);});
  await page.screenshot({path:testInfo.outputPath('home.png'),fullPage:true});

@@ -32,7 +32,7 @@ As variáveis públicas são documentadas em `.env.example`:
 - `NEXT_PUBLIC_WHATSAPP_NUMBER`: telefone oficial com código do país e DDD. Sem valor, o botão mostra aviso de atendimento em breve.
 - `NEXT_PUBLIC_CONTACT_EMAIL`: e-mail oficial.
 - `NEXT_PUBLIC_INSTAGRAM_URL`: URL oficial completa.
-- `NEXT_PUBLIC_HERO_VIDEO_URL`: URL de vídeo autorizado. Sem valor, a home exibe a composição visual com aviso de espaço reservado.
+- Vídeo oficial: adicione `public/videos/layal-hero.mp4` e recompile. O arquivo é detectado durante o build, recebe uma camada escura e respeita movimento reduzido. Até sua chegada, a composição conceitual permanece. Consulte `public/videos/README.md`.
 
 Nunca coloque segredos em variáveis `NEXT_PUBLIC_*`. Reinicie/recompile ao alterar as variáveis.
 
@@ -79,3 +79,7 @@ Playwright inicia a versão de produção (`npm start`), após o build. O CI pub
 O CI aprovou build, lint, TypeScript, três testes unitários e seis testes de navegador após trocar o servidor de desenvolvimento pelo de produção. O lockfile foi recuperado do artefato do CI, preservando as versões testadas. O CI usa `npm ci`. Novas capturas da home em desktop/celular também são coletadas no próximo ciclo.
 
 A análise de segurança e a pendência de desenvolvimento estão em [docs/SECURITY.md](docs/SECURITY.md). As opções e instruções de hospedagem da prévia estão em [docs/PREVIEW.md](docs/PREVIEW.md). Nenhum endereço externo foi publicado.
+
+## Identidade visual aprovada
+
+A versão atual usa preto profundo `#080808`, dourado champagne `#C9A96E` e texto marfim `#F5F0E8`. Cabeçalho, catálogo, produto, carrinho e rodapé seguem o tema escuro. A home apresenta “Perfumes que deixam presença.” e o botão “DESCUBRA O SEU”. Carrinho, rotas e fixtures foram preservados; somente as asserções dos textos alterados na home foram ajustadas nos testes. Nenhum vídeo fictício ou fotografia oficial foi adicionado.
