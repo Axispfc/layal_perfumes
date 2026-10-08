@@ -26,3 +26,13 @@ nav a:hover,.text-link:hover,.details-link:hover{color:var(--gold)}
 }
 @media(max-width:360px){.cart-row{gap:9px}.cart-art{width:62px}.cart-info h2{font-size:17px}.cart-end strong{font-size:9px}.hero h1{font-size:39px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}.hero-video{display:none}}
+/* Give the conceptual product image more presence; keep cart thumbnails fully visible. */
+.product-art .bottle{width:132px;height:204px}
+.product-art .bottle-cap{height:44px}
+.product-art .bottle-neck{top:44px;height:11px}
+.product-art .bottle-body{top:54px}
+.product-art .bottle-label span{font-size:20px}
+.product-art .bottle-label small{font-size:4px}
+.product-art .bottle-label i{font-size:18px}
+.cart-art .bottle-scene{display:flex;align-items:center;justify-content:center}
+.cart-art .bottle{flex-shrink:0}
