@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {parseOfficialCatalog,selectPublicCatalog} from '../src/lib/official-catalog';
 import {demoProducts} from '../src/data/demo-products';
-import officialData from '../src/data/official-catalog.json';
+import officialData from '../src/data/official-catalog.json' with {type:'json'};
 import {sanitizeCart,subtotal} from '../src/lib/cart';
 const entry=()=>({id:'layal-test',status:'published',slug:'produto-test',name:'Produto de teste técnico',brand:'Marca de teste técnico',priceCents:12345,volume:'50 ml',category:'unissex',description:'Fixture exclusiva dos testes automatizados.',family:null,notes:{top:null,heart:null,base:null},photoPath:null,bestseller:false});
 const parse=(items:unknown[])=>parseOfficialCatalog({schemaVersion:1,products:items});

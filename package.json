@@ -10,7 +10,11 @@
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/cart.test.ts tests/official-catalog.test.ts",
     "test:e2e": "playwright test",
-    "catalog:validate": "tsx scripts/validate-catalog.ts"
+    "catalog:validate": "tsx scripts/validate-catalog.ts",
+    "catalog:sync": "tsx scripts/sync-catalog.ts",
+    "prebuild": "npm run catalog:sync",
+    "predev": "npm run catalog:sync",
+    "pretest": "npm run catalog:sync"
   },
   "repository": {
     "type": "git",

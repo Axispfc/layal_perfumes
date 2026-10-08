@@ -1,6 +1,6 @@
 import {existsSync} from 'node:fs';
 import {join} from 'node:path';
-import data from '../src/data/official-catalog.json';
+import data from '../src/data/official-catalog.json' with {type:'json'};
 import {parseOfficialCatalog} from '../src/lib/official-catalog';
 const published=parseOfficialCatalog(data);
 console.log(`Catálogo válido: ${data.products.length} cadastros, ${published.length} publicados, ${data.products.length-published.length} rascunhos.`);

@@ -39,7 +39,7 @@ Arquivos não serão alterados, recoloridos, recortados, retocados ou substituí
 
 `npm run catalog:validate` verifica a estrutura, os IDs, slugs, valores, categorias e caminhos; informa o número de rascunhos e publicados e alerta sobre fotografias ainda ausentes.
 
-Se não houver oficiais publicados, o catálogo demonstrativo permanece identificado. Ao publicar o primeiro cadastro oficial, todos os produtos fictícios são retirados do catálogo público e suas URLs deixam de existir. Não há mistura entre as duas fontes. Os demais cadastros oficiais permanecem privados até serem aprovados. Reexecute build/deploy após cadastrar os dados e fotografias.
+Se não houver oficiais publicados, o catálogo demonstrativo permanece identificado. Ao publicar o primeiro cadastro oficial, todos os produtos fictícios são retirados do catálogo público e suas URLs deixam de existir. Não há mistura entre as duas fontes. Os demais cadastros oficiais permanecem privados até serem aprovados. Reexecute build/deploy após cadastrar os dados e fotografias. Os comandos de build, desenvolvimento e testes sincronizam automaticamente `src/data/published-products.json` com somente os registros oficiais publicados e os campos validados. Não edite esse arquivo manualmente: a fonte de cadastro é `official-catalog.json`. Rascunhos não são importados pelos componentes da loja nem enviados ao navegador.
 
 O carrinho conserva IDs e quantidades; na recarga, itens da demonstração ou produtos retirados do catálogo são descartados, sem conversão para outro perfume. Os preços e o subtotal passam a usar os dados oficiais. Ainda não há checkout, pagamento ou reserva de estoque.
 
