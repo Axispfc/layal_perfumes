@@ -47,6 +47,7 @@ test('visual evidence of storefront pages',async({page},testInfo)=>{
  await page.screenshot({path:testInfo.outputPath('produto.png'),fullPage:true});
  await page.getByRole('button',{name:'Adicionar ao carrinho'}).click();
  await page.getByRole('link',{name:'Ver carrinho →'}).click();
+ await page.goto('/carrinho');
  await expect(page.getByRole('heading',{name:'Noite do Deserto'})).toBeVisible();
  await expect(page.getByText('R$ 289,00',{exact:true})).toHaveCount(2);
  await page.evaluate(()=>{if(document.activeElement instanceof HTMLElement) document.activeElement.blur();window.scrollTo(0,0);});
