@@ -50,6 +50,7 @@ npm run typecheck
 npm test
 npm run build
 npx playwright install --with-deps chromium
+npm run build
 npm run test:e2e
 ```
 
@@ -68,3 +69,7 @@ Os comandos de build, lint, TypeScript e testes foram tentados, mas falharam pel
 ## Resultado do primeiro CI no GitHub
 
 O GitHub Actions instalou as dependências, aprovou lint (com um aviso), TypeScript e os três testes unitários do carrinho. O build falhou porque `package.json` declarava CommonJS enquanto os arquivos usam módulos ES. A declaração foi corrigida para `type: module` e o aviso de exportação anônima no PostCSS foi removido. O build e os testes de navegador precisam ser confirmados na execução seguinte.
+
+## Testes de navegador
+
+Playwright inicia a versão de produção (`npm start`), após o build. O CI publica o relatório de auditoria, lockfile resolvido, relatório HTML e capturas/rastros de falhas como artefatos por sete dias. Assim os testes não dependem de HMR ou permissões de origem do servidor de desenvolvimento.

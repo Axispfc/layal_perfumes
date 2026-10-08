@@ -1,17 +1,33 @@
 name: Validate storefront
 on: [push, pull_request]
+permissions:
+  contents: read
 jobs:
   checks:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
       - run: npm install
+      - name: Dependency audit report
+        run: node scripts/audit-report.mjs
       - run: npm run lint
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
+      - name: Upload validation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: storefront-validation
+          path: |
+            audit-report.json
+            package-lock.json
+            playwright-report/
+            test-results/
+          retention-days: 7
