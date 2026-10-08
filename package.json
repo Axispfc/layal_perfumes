@@ -1,0 +1,53 @@
+{
+  "name": "layal_perfumes",
+  "version": "1.0.0",
+  "description": "Layal Perfumes \u2014 storefront demonstrativo em Next.js",
+  "scripts": {
+    "dev": "next dev --hostname 0.0.0.0",
+    "build": "next build",
+    "start": "next start --hostname 0.0.0.0",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test tests/cart.test.ts tests/official-catalog.test.ts",
+    "test:e2e": "playwright test",
+    "catalog:validate": "tsx scripts/validate-catalog.ts",
+    "catalog:sync": "tsx scripts/sync-catalog.ts",
+    "prebuild": "npm run catalog:sync",
+    "predev": "npm run catalog:sync",
+    "pretest": "npm run catalog:sync"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Axispfc/layal_perfumes.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Axispfc/layal_perfumes/issues"
+  },
+  "homepage": "https://github.com/Axispfc/layal_perfumes#readme",
+  "private": true,
+  "dependencies": {
+    "next": "^16.0.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "lucide-react": "^0.468.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@types/node": "^22.0.0",
+    "tailwindcss": "^4.1.0",
+    "@tailwindcss/postcss": "^4.1.0",
+    "eslint": "^9.0.0",
+    "eslint-config-next": "^16.0.0",
+    "@playwright/test": "^1.56.0",
+    "tsx": "^4.20.0"
+  },
+  "engines": {
+    "node": ">=20.9.0"
+  }
+}

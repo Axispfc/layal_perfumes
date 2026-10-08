@@ -1,0 +1,79 @@
+import {test,expect} from '@playwright/test';
+import {products} from '../src/data/products';
+import {money} from '../src/lib/catalog';
+const selected=products[0];
+const categoryLabels={masculino:'Masculino',feminino:'Feminino',unissex:'Unissex',kits:'Kits'};
+test('product, cart quantities, persistence and removal',async({page})=>{
+ await page.goto(`/produtos/${selected.slug}`);
+ await page.getByRole('button',{name:'Adicionar ao carrinho'}).click();
+ await page.getByRole('link',{name:'Ver carrinho →'}).click();
+ await expect(page.getByText(money(selected.priceCents),{exact:true})).toHaveCount(2);
+ await page.getByRole('button',{name:`Aumentar quantidade de ${selected.name}`}).click();
+ await expect(page.getByText(money(selected.priceCents*2),{exact:true})).toHaveCount(2);
+ await page.reload();
+ await expect(page.getByText(money(selected.priceCents*2),{exact:true})).toHaveCount(2);
+ await page.getByRole('button',{name:`Diminuir quantidade de ${selected.name}`}).click();
+ await expect(page.getByText(money(selected.priceCents),{exact:true})).toHaveCount(2);
+ await page.getByRole('button',{name:`Remover ${selected.name}`}).click();
+ await expect(page.getByText('Seu carrinho ainda está vazio.')).toBeVisible();
+});
+test('category filtering and responsive layout',async({page})=>{
+ await page.goto(`/catalogo?categoria=${selected.category}`);
+ await expect(page.getByRole('heading',{name:selected.name,exact:true})).toBeVisible();
+ for(const product of products.filter(p=>p.category!==selected.category))await expect(page.locator(`.product-card a[href="/produtos/${product.slug}"]`)).toHaveCount(0);
+ await page.getByRole('button',{name:'Todos os perfumes',exact:true}).click();
+ await expect(page.locator('.product-card')).toHaveCount(products.length);
+ await page.getByRole('button',{name:categoryLabels[selected.category],exact:true}).click();
+ await expect(page.locator('.product-card')).toHaveCount(products.filter(p=>p.category===selected.category).length);
+ await page.goto('/');
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
+ await page.getByRole('link',{name:'DESCUBRA O SEU'}).click();
+ await expect(page.getByRole('heading',{name:'Uma essência para cada história.'})).toBeVisible();
+});
+test('quiz placeholder and missing products',async({page})=>{
+ await page.goto('/quiz');
+ await expect(page.getByText('EM BREVE · EXPERIÊNCIA LAYAL')).toBeVisible();
+ const response=await page.goto('/produtos/inexistente');
+ expect(response?.status()).toBe(404);
+});
+test('visual evidence of storefront pages',async({page},testInfo)=>{
+ await page.goto('/');
+ await expect(page.getByRole('heading',{name:'Perfumes que deixam presença.'})).toBeVisible();
+ await page.evaluate(()=>document.fonts.ready);
+ await page.evaluate(()=>{if(document.activeElement instanceof HTMLElement) document.activeElement.blur();window.scrollTo(0,0);});
+ await page.screenshot({path:testInfo.outputPath('home.png'),fullPage:true});
+ await page.goto('/catalogo');
+ await expect(page.getByRole('heading',{name:'Nossa coleção.'})).toBeVisible();
+ await expect(page.getByRole('heading',{name:products[products.length-1].name,exact:true})).toBeVisible();
+ await page.evaluate(()=>{if(document.activeElement instanceof HTMLElement) document.activeElement.blur();window.scrollTo(0,0);});
+ await page.screenshot({path:testInfo.outputPath('catalogo.png'),fullPage:true});
+ await page.goto(`/produtos/${selected.slug}`);
+ await expect(page.getByRole('button',{name:'Adicionar ao carrinho'})).toBeEnabled();
+ await page.evaluate(()=>{if(document.activeElement instanceof HTMLElement) document.activeElement.blur();window.scrollTo(0,0);});
+ await page.screenshot({path:testInfo.outputPath('produto.png'),fullPage:true});
+ await page.getByRole('button',{name:'Adicionar ao carrinho'}).click();
+ await page.getByRole('link',{name:'Ver carrinho →'}).click();
+ await page.goto('/carrinho');
+ await expect(page.getByRole('heading',{name:selected.name})).toBeVisible();
+ await expect(page.getByText(money(selected.priceCents),{exact:true})).toHaveCount(2);
+ await page.evaluate(()=>{if(document.activeElement instanceof HTMLElement) document.activeElement.blur();window.scrollTo(0,0);});
+ await page.screenshot({path:testInfo.outputPath('carrinho.png'),fullPage:true});
+});
+
+test('all official details and multi-product cart use commercial prices',async({page})=>{
+ for(const product of products){
+  await page.goto(`/produtos/${product.slug}`);
+  await expect(page.getByRole('heading',{name:product.name,exact:true})).toBeVisible();
+  await expect(page.locator('.detail-price')).toContainText(money(product.priceCents));
+  await expect(page.getByRole('button',{name:'Adicionar ao carrinho'})).toBeEnabled();
+ }
+ const first=products[0],second=products[4];
+ for(const product of [first,second]){
+  await page.goto(`/produtos/${product.slug}`);
+  await page.getByRole('button',{name:'Adicionar ao carrinho'}).click();
+ }
+ await page.goto('/carrinho');
+ await expect(page.getByRole('heading',{name:first.name,exact:true})).toBeVisible();
+ await expect(page.getByRole('heading',{name:second.name,exact:true})).toBeVisible();
+ await expect(page.getByText(money(first.priceCents+second.priceCents),{exact:true})).toHaveCount(1);
+});
