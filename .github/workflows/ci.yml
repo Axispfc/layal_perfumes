@@ -11,9 +11,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: npm install
+      - run: npm ci
       - name: Dependency audit report
         run: node scripts/audit-report.mjs
+      - name: Production dependency audit
+        run: npm audit --omit=dev --audit-level=moderate
       - run: npm run lint
       - run: npm run typecheck
       - run: npm test

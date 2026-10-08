@@ -7,7 +7,7 @@ Primeira versão demonstrativa do e-commerce, em Next.js App Router, TypeScript 
 Requer Node.js 20.9+ (recomendado 22) e acesso ao npm.
 
 ```sh
-npm install
+npm ci
 cp .env.example .env.local
 npm run dev
 ```
@@ -73,3 +73,9 @@ O GitHub Actions instalou as dependências, aprovou lint (com um aviso), TypeScr
 ## Testes de navegador
 
 Playwright inicia a versão de produção (`npm start`), após o build. O CI publica o relatório de auditoria, lockfile resolvido, relatório HTML e capturas/rastros de falhas como artefatos por sete dias. Assim os testes não dependem de HMR ou permissões de origem do servidor de desenvolvimento.
+
+## Validação e prévia
+
+O CI aprovou build, lint, TypeScript, três testes unitários e seis testes de navegador após trocar o servidor de desenvolvimento pelo de produção. O lockfile foi recuperado do artefato do CI, preservando as versões testadas. O CI usa `npm ci`. Novas capturas da home em desktop/celular também são coletadas no próximo ciclo.
+
+A análise de segurança e a pendência de desenvolvimento estão em [docs/SECURITY.md](docs/SECURITY.md). As opções e instruções de hospedagem da prévia estão em [docs/PREVIEW.md](docs/PREVIEW.md). Nenhum endereço externo foi publicado.

@@ -30,3 +30,8 @@ test('quiz placeholder and missing products',async({page})=>{
  const response=await page.goto('/produtos/inexistente');
  expect(response?.status()).toBe(404);
 });
+test('visual evidence of the home page',async({page},testInfo)=>{
+ await page.goto('/');
+ await expect(page.getByRole('heading',{name:'A essência do extraordinário.'})).toBeVisible();
+ await page.screenshot({path:testInfo.outputPath('home.png'),fullPage:true});
+});
