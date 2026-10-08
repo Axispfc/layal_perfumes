@@ -42,3 +42,5 @@ nav a:hover,.text-link:hover,.details-link:hover{color:var(--gold)}
 .photo-placeholder span{font:15px Georgia;line-height:1.4}.photo-placeholder small{font-size:10px;color:var(--muted);line-height:1.6}
 .cart-art .official-photo img{padding:8px}.cart-art .photo-placeholder{padding:7px;gap:5px}.cart-art .photo-placeholder svg{width:20px}.cart-art .photo-placeholder span{font:9px Arial}.cart-art .photo-placeholder small{display:none}
 @media(max-width:700px){.photo-placeholder{padding:18px 12px}.photo-placeholder span{font-size:13px}.official-photo img{padding:15px}}
+
+.catalog-origin{color:var(--gold,#C9A96E);font-size:.72rem;letter-spacing:.06em;margin:.4rem 0 .8rem;}

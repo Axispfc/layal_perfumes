@@ -22,7 +22,9 @@ export function parseOfficialCatalog(value: unknown): Product[] {
   const photo=entry.photoPath;
   if(photo!==null && (typeof photo!=="string" || !/^\/images\/products\/[a-z0-9]+(?:-[a-z0-9]+)*\.(?:jpg|jpeg|png|webp)$/.test(photo)))throw new Error(`Catálogo ${entry.id}: fotografia deve usar caminho local padronizado em /images/products/ ou null.`);
   if(entry.family!==null && (typeof entry.family!=="string" || !entry.family.trim()))throw new Error(`Catálogo ${entry.id}: família deve ser texto ou null.`);
-  result.push({id:entry.id,slug,name:text("name"),brand:text("brand"),priceCents:entry.priceCents,volume:text("volume"),category:entry.category,description:text("description"),family:entry.family?.trim(),notes:{top:note("top"),heart:note("heart"),base:note("base")},photoPath:photo,bestseller:entry.bestseller,isDemo:false});
+  if(entry.sourcePage!==undefined && (!Number.isInteger(entry.sourcePage) || entry.sourcePage<2 || entry.sourcePage>22))throw new Error(`Catálogo ${entry.id}: página de origem inválida.`);
+  if(entry.gender!==undefined && entry.gender!==entry.category.charAt(0).toUpperCase()+entry.category.slice(1))throw new Error(`Catálogo ${entry.id}: gênero divergente da categoria.`);
+  result.push({id:entry.id,slug,gender:entry.gender,sourcePage:entry.sourcePage,name:text("name"),brand:text("brand"),priceCents:entry.priceCents,volume:text("volume"),category:entry.category,description:text("description"),family:entry.family?.trim(),notes:{top:note("top"),heart:note("heart"),base:note("base")},photoPath:photo,bestseller:entry.bestseller,isDemo:false});
  }
  return result;
 }

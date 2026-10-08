@@ -6,8 +6,19 @@ import officialData from '../src/data/official-catalog.json' with {type:'json'};
 import {sanitizeCart,subtotal} from '../src/lib/cart';
 const entry=()=>({id:'layal-test',status:'published',slug:'produto-test',name:'Produto de teste técnico',brand:'Marca de teste técnico',priceCents:12345,volume:'50 ml',category:'unissex',description:'Fixture exclusiva dos testes automatizados.',family:null,notes:{top:null,heart:null,base:null},photoPath:null,bestseller:false});
 const parse=(items:unknown[])=>parseOfficialCatalog({schemaVersion:1,products:items});
-test('21 unfilled drafts stay out of the public official catalog',()=>{
- assert.equal(officialData.products.length,21);assert.deepEqual(parseOfficialCatalog(officialData),[]);
+test('21 real commercial PDF records replace every demo and retain Layal prices',()=>{
+ const official=parseOfficialCatalog(officialData);
+ assert.equal(official.length,21);
+ assert.deepEqual(official.map(p=>p.priceCents),[31900,24900,24900,24900,59900,29900,29900,34900,30900,30900,23900,20900,27900,22900,28900,27900,28900,45900,59900,29900,29900]);
+ assert.deepEqual(official.map(p=>p.sourcePage),Array.from({length:21},(_,i)=>i+2));
+ assert.equal(official.at(-1)?.volume,'105 ml');
+ assert.ok(official.slice(0,-1).every(p=>p.volume==='100 ml'));
+ assert.ok(selectPublicCatalog(official,demoProducts).every(p=>!p.isDemo && p.id.startsWith('layal-')));
+ assert.equal(official.find(p=>p.name==='Afeef')?.notes.top,'Pera, Bergamota, Pêssego e Frutas Vermelhas');
+ assert.ok(official.every(p=>!p.bestseller));
+});
+test('unfilled drafts stay private and do not leak into the public source',()=>{
+ assert.deepEqual(parse([{id:'layal-draft',status:'draft',name:null}]),[]);
  assert.equal(selectPublicCatalog([],demoProducts),demoProducts);
 });
 test('official publication removes all demo products and supports missing notes and photos',()=>{

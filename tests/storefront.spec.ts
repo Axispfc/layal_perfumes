@@ -20,7 +20,7 @@ test('product, cart quantities, persistence and removal',async({page})=>{
 test('category filtering and responsive layout',async({page})=>{
  await page.goto(`/catalogo?categoria=${selected.category}`);
  await expect(page.getByRole('heading',{name:selected.name,exact:true})).toBeVisible();
- for(const product of products.filter(p=>p.category!==selected.category))await expect(page.getByRole('heading',{name:product.name,exact:true})).toHaveCount(0);
+ for(const product of products.filter(p=>p.category!==selected.category))await expect(page.locator(`.product-card a[href="/produtos/${product.slug}"]`)).toHaveCount(0);
  await page.getByRole('button',{name:'Todos os perfumes',exact:true}).click();
  await expect(page.locator('.product-card')).toHaveCount(products.length);
  await page.getByRole('button',{name:categoryLabels[selected.category],exact:true}).click();
@@ -58,4 +58,20 @@ test('visual evidence of storefront pages',async({page},testInfo)=>{
  await expect(page.getByText(money(selected.priceCents),{exact:true})).toHaveCount(2);
  await page.evaluate(()=>{if(document.activeElement instanceof HTMLElement) document.activeElement.blur();window.scrollTo(0,0);});
  await page.screenshot({path:testInfo.outputPath('carrinho.png'),fullPage:true});
+});
+
+test('all official details and multi-product cart use commercial prices',async({page})=>{
+ for(const product of products){
+  await page.goto(`/produtos/${product.slug}`);
+  await expect(page.getByRole('heading',{name:product.name,exact:true})).toBeVisible();
+  await expect(page.locator('.detail-price')).toContainText(money(product.priceCents));
+  await expect(page.getByRole('button',{name:'Adicionar ao carrinho'})).toBeEnabled();
+ }
+ const first=products[0],second=products[4];
+ for(const product of [first,second]){
+  await page.goto(`/produtos/${product.slug}`);
+  await page.getByRole('button',{name:'Adicionar ao carrinho'}).click();
+ }
+ await page.goto('/carrinho');
+ await expect(page.getByText(money(first.priceCents+second.priceCents),{exact:true})).toHaveCount(2);
 });
