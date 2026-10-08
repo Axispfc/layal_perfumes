@@ -1,6 +1,6 @@
 # Layal Perfumes
 
-Primeira versão demonstrativa do e-commerce, em Next.js App Router, TypeScript e Tailwind CSS. Identidade visual em preto profundo, dourado champagne e marfim, com layouts responsivos.
+Loja em Next.js App Router, TypeScript e Tailwind CSS, com identidade preta e dourada, catálogo comercial oficial e layouts responsivos. Mudanças isoladas em `feat/layal-storefront`, para revisão no [PR #1](https://github.com/Axispfc/layal_perfumes/pull/1). Sem merge ou publicação em produção.
 
 ## Visualizar localmente
 
@@ -12,80 +12,55 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Abra http://localhost:3000. Não é necessário configurar variáveis para explorar o catálogo e o carrinho. Para produção local: `npm run build` e `npm start`.
+Abra http://localhost:3000. Nenhuma variável é necessária para explorar o catálogo e o carrinho. Para produção local: `npm run build` e `npm start`.
+
+## Catálogo e fotografias
+
+21 fichas do PDF comercial oficial fornecido pela Layal, páginas 02–22. Nomes, marcas, preços em reais, volumes, descrições, público, perfis e notas foram transcritos desse documento. Preços de outras lojas não são usados. A fonte versionada está em `src/data/official-catalog.json`; build/dev/test geram `published-products.json` com os registros validados.
+
+Os quatro fictícios saíram da coleção pública. As duas fichas Ana Al Awwal e as duas Fakhar mantêm nomes iguais aos do PDF, com IDs/URLs distintos e a ficha indicada na interface. Variantes comerciais não foram presumidas. Mais vendidos permanece sem produtos até confirmação da Layal.
+
+As 21 fotografias seguem pendentes de obtenção e conferência. Produtos oficiais usam placeholders identificados, nunca ilustrações de outros perfumes. A arte conceitual do hero continua sinalizada como tal. Não há vídeo fictício.
+
+- [Transcrição e critérios](docs/CATALOGO-OFICIAL.md)
+- [Planilha de conferência](docs/catalogo-oficial-21.csv)
+- [Lista de fotos e pendências](docs/FOTOGRAFIAS.md)
+- [Registro de fontes candidatas](docs/product-photo-sources.json)
 
 ## Funcionalidades
 
-- Home, espaço para vídeo cinematográfico e identidade provisória.
-- Catálogo com filtros masculino, feminino, kits e mais vendidos demonstrativos.
-- Página individual, notas olfativas, volume e adição ao carrinho.
-- Carrinho persistente no navegador, alteração de quantidade, remoção e subtotal em centavos.
-- Atendimento flutuante, rodapé e página preparada para o futuro quiz.
-- Navegação por teclado, menu móvel, avisos de demonstração e preferência de movimento reduzido.
+- Home, catálogo e páginas individuais para todos os registros oficiais.
+- Filtros masculino, feminino, unissex, kits e mais vendidos.
+- Carrinho persistente, controles de quantidade, remoção e subtotal em centavos.
+- Atendimento flutuante, rodapé, menu móvel, navegação por teclado e preferência de movimento reduzido.
+- Estrutura para o futuro quiz, ainda sem recomendações automatizadas.
 
-Todos os nomes, preços, volumes e notas são **fictícios**, claramente sinalizados na interface. Os frascos são ilustrações conceituais em CSS, não fotos oficiais. Mais vendidos não representa dados reais. Nenhum pagamento, pedido, reserva de estoque ou checkout financeiro é implementado. A demonstração envia instrução para não indexar as páginas.
+Não há pagamentos, checkout financeiro, pedidos, reserva de estoque ou garantia de disponibilidade. A loja permanece sem indexação nesta etapa.
 
-## Configuração oficial futura
+## Configuração
 
-As variáveis públicas são documentadas em `.env.example`:
+Variáveis públicas em `.env.example`: `NEXT_PUBLIC_WHATSAPP_NUMBER`, `NEXT_PUBLIC_CONTACT_EMAIL` e `NEXT_PUBLIC_INSTAGRAM_URL`. Sem telefone, o atendimento mostra aviso de disponibilidade futura. Nunca colocar segredos em variáveis `NEXT_PUBLIC_*`.
 
-- `NEXT_PUBLIC_WHATSAPP_NUMBER`: telefone oficial com código do país e DDD. Sem valor, o botão mostra aviso de atendimento em breve.
-- `NEXT_PUBLIC_CONTACT_EMAIL`: e-mail oficial.
-- `NEXT_PUBLIC_INSTAGRAM_URL`: URL oficial completa.
-- Vídeo oficial: adicione `public/videos/layal-hero.mp4` e recompile. O arquivo é detectado durante o build, recebe uma camada escura e respeita movimento reduzido. Até sua chegada, a composição conceitual permanece. Consulte `public/videos/README.md`.
+Vídeo oficial: adicionar `public/videos/layal-hero.mp4` e recompilar. A home detecta o arquivo no build, aplica camada escura e respeita movimento reduzido. Consulte `public/videos/README.md`.
 
-Nunca coloque segredos em variáveis `NEXT_PUBLIC_*`. Reinicie/recompile ao alterar as variáveis.
+## Arquitetura
 
-## Organização e integrações
-
-`src/app` contém as rotas; `src/components`, os componentes; `src/data/products.ts`, as fixtures; `src/lib/catalog.ts`, a interface de acesso ao catálogo; `src/lib/cart.ts`, validação e cálculo; `src/lib/quiz.ts`, o contrato futuro do quiz.
-
-Substitua o repositório de demonstração por uma integração com banco de dados e passe a validar preços e estoque no servidor antes de implementar pedidos. O carrinho atual só demonstra interação local e não oferece garantias de disponibilidade. O quiz aguarda informações oficiais para recomendar produtos. Nenhum provedor de pagamento foi configurado.
+`src/app`: rotas; `src/components`: interface; `src/data`: catálogo oficial e fixtures de teste; `src/lib/catalog.ts`: acesso ao catálogo; `src/lib/cart.ts`: validação e cálculo; `src/lib/quiz.ts`: contrato futuro. Uma futura integração de estoque, banco e pagamentos deverá validar disponibilidade e preços no servidor.
 
 ## Verificações
 
 ```sh
+npm run catalog:validate
 npm run lint
 npm run typecheck
 npm test
 npm run build
 npx playwright install --with-deps chromium
-npm run build
 npm run test:e2e
 ```
 
-Testes do carrinho cobrem dados corrompidos, quantidades, duplicatas e subtotal. Testes de navegador cobrem produto/carrinho, persistência, filtros, layout desktop/móvel, quiz e 404. O workflow do GitHub executa essas verificações.
+O GitHub Actions instala via `npm ci`, audita dependências, valida dados, executa lint/TypeScript/testes/build e Playwright em Chromium para computador e celular. Os testes cobrem os 21 preços do PDF, notas de fonte, volumes, páginas individuais, filtros, persistência, quantidades, remoção, subtotal, quiz e 404. As capturas de home, catálogo, produto e carrinho ficam nos artefatos de validação por sete dias.
 
-## Estado da entrega
+Localmente, a instalação desta etapa falhou com `connect EPERM 172.31.7.61:8080` ao baixar dependências do npm. Sucessos devem ser confirmados pelo CI; nenhuma verificação local dependente dessas ferramentas foi considerada aprovada.
 
-Mudanças isoladas na branch `feat/layal-storefront`. A branch principal não foi alterada.
-
-A revisão confirmou as rotas, componentes, fixtures, configuração e testes versionados. Foi acrescentado `next-env.d.ts` para que as referências de tipos do Next.js estejam disponíveis antes do primeiro build.
-
-A instalação foi tentada novamente e falhou com `EPERM` ao conectar ao proxy `172.31.7.61:8080` para acessar `https://registry.npmjs.org/@playwright%2ftest`. A tentativa de permissão adicional foi interrompida. Não foi possível instalar dependências ou gerar lockfile.
-
-Os comandos de build, lint, TypeScript e testes foram tentados, mas falharam pela ausência dos executáveis locais (`next`, `eslint`, `tsc`, `tsx`; o comando `playwright` disponível não reconhece `test`). **Nenhuma dessas verificações passou no ambiente local.** `git diff origin/main --check` passou. A validação funcional e visual continua pendente, assim como a revisão do lockfile após a primeira instalação autorizada.
-
-## Resultado do primeiro CI no GitHub
-
-O GitHub Actions instalou as dependências, aprovou lint (com um aviso), TypeScript e os três testes unitários do carrinho. O build falhou porque `package.json` declarava CommonJS enquanto os arquivos usam módulos ES. A declaração foi corrigida para `type: module` e o aviso de exportação anônima no PostCSS foi removido. O build e os testes de navegador precisam ser confirmados na execução seguinte.
-
-## Testes de navegador
-
-Playwright inicia a versão de produção (`npm start`), após o build. O CI publica o relatório de auditoria, lockfile resolvido, relatório HTML e capturas/rastros de falhas como artefatos por sete dias. Assim os testes não dependem de HMR ou permissões de origem do servidor de desenvolvimento.
-
-## Validação e prévia
-
-O CI aprovou build, lint, TypeScript, três testes unitários e seis testes de navegador após trocar o servidor de desenvolvimento pelo de produção. O lockfile foi recuperado do artefato do CI, preservando as versões testadas. O CI usa `npm ci`. Novas capturas da home em desktop/celular também são coletadas no próximo ciclo.
-
-A análise de segurança e a pendência de desenvolvimento estão em [docs/SECURITY.md](docs/SECURITY.md). As opções e instruções de hospedagem da prévia estão em [docs/PREVIEW.md](docs/PREVIEW.md). Nenhum endereço externo foi publicado.
-
-## Identidade visual aprovada
-
-A versão atual usa preto profundo `#080808`, dourado champagne `#C9A96E` e texto marfim `#F5F0E8`. Cabeçalho, catálogo, produto, carrinho e rodapé seguem o tema escuro. A home apresenta “Perfumes que deixam presença.” e o botão “DESCUBRA O SEU”. Carrinho, rotas e fixtures foram preservados; somente as asserções dos textos alterados na home foram ajustadas nos testes. Nenhum vídeo fictício ou fotografia oficial foi adicionado.
-
-## Cadastro do catálogo oficial
-
-A estrutura dos 21 cadastros está em `src/data/official-catalog.json`, inicialmente como rascunhos vazios. O catálogo público permanece demonstrativo até existir um oficial aprovado; então somente os oficiais publicados são exibidos, sem mistura com produtos fictícios. Fotos oficiais são servidas sem alteração em `public/images/products/`; fotos ausentes recebem um espaço reservado identificado. Filtros incluem a categoria unissex.
-
-Envie os dados usando [docs/catalogo-oficial-21.csv](docs/catalogo-oficial-21.csv) e as fotografias originais em ZIP, associadas aos IDs. Instruções completas em [docs/CATALOGO-OFICIAL.md](docs/CATALOGO-OFICIAL.md). Execute `npm run catalog:validate` antes de publicar cadastros. Não há pagamentos ou checkout nesta fase.
+A análise de segurança e a pendência conhecida de desenvolvimento estão em [docs/SECURITY.md](docs/SECURITY.md). Opções de prévia: [docs/PREVIEW.md](docs/PREVIEW.md). Nenhuma hospedagem foi configurada nesta etapa.

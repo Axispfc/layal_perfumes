@@ -73,5 +73,7 @@ test('all official details and multi-product cart use commercial prices',async({
   await page.getByRole('button',{name:'Adicionar ao carrinho'}).click();
  }
  await page.goto('/carrinho');
- await expect(page.getByText(money(first.priceCents+second.priceCents),{exact:true})).toHaveCount(2);
+ await expect(page.getByRole('heading',{name:first.name,exact:true})).toBeVisible();
+ await expect(page.getByRole('heading',{name:second.name,exact:true})).toBeVisible();
+ await expect(page.getByText(money(first.priceCents+second.priceCents),{exact:true})).toHaveCount(1);
 });
