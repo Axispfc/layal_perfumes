@@ -64,3 +64,7 @@ A revisão confirmou as rotas, componentes, fixtures, configuração e testes ve
 A instalação foi tentada novamente e falhou com `EPERM` ao conectar ao proxy `172.31.7.61:8080` para acessar `https://registry.npmjs.org/@playwright%2ftest`. A tentativa de permissão adicional foi interrompida. Não foi possível instalar dependências ou gerar lockfile.
 
 Os comandos de build, lint, TypeScript e testes foram tentados, mas falharam pela ausência dos executáveis locais (`next`, `eslint`, `tsc`, `tsx`; o comando `playwright` disponível não reconhece `test`). **Nenhuma dessas verificações passou no ambiente local.** `git diff origin/main --check` passou. A validação funcional e visual continua pendente, assim como a revisão do lockfile após a primeira instalação autorizada.
+
+## Resultado do primeiro CI no GitHub
+
+O GitHub Actions instalou as dependências, aprovou lint (com um aviso), TypeScript e os três testes unitários do carrinho. O build falhou porque `package.json` declarava CommonJS enquanto os arquivos usam módulos ES. A declaração foi corrigida para `type: module` e o aviso de exportação anônima no PostCSS foi removido. O build e os testes de navegador precisam ser confirmados na execução seguinte.
