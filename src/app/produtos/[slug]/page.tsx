@@ -1,0 +1,8 @@
+import Link from "next/link";
+import {notFound} from "next/navigation";
+import {catalog,money} from "@/lib/catalog";
+import {Bottle} from "@/components/bottle";
+import {AddToCart} from "@/components/add-to-cart";
+export async function generateStaticParams() {return (await catalog.list()).map(p=>({slug:p.slug}));}
+export async function generateMetadata({params}:{params:Promise<{slug:string}>}) {const product=await catalog.findBySlug((await params).slug);return {title:product?.name ?? "Produto não encontrado"};}
+export default async function ProductPage({params}:{params:Promise<{slug:string}>}) {const product=await catalog.findBySlug((await params).slug);if(!product)notFound();return <section className="section page-section"><Link className="text-link" href="/catalogo">← Voltar à coleção</Link><div className="product-detail"><div className="detail-art"><span className="demo-tag">ILUSTRAÇÃO · DEMONSTRAÇÃO</span><Bottle color={product.color} large/></div><div><div className="eyebrow">LAYAL · PRODUTO FICTÍCIO</div><h1>{product.name}</h1><p className="intro">{product.family}</p><p>{product.description}</p><div className="detail-price">{money(product.priceCents)} <small>Preço de demonstração</small></div><p>Volume ilustrativo: {product.volume}</p><AddToCart id={product.id}/><div className="notes"><h2>Notas olfativas <small>fictícias</small></h2><dl><div><dt>Saída</dt><dd>{product.notes.top}</dd></div><div><dt>Coração</dt><dd>{product.notes.heart}</dd></div><div><dt>Fundo</dt><dd>{product.notes.base}</dd></div></dl></div><p className="demo-notice">Este item não está à venda. Todas as informações são de demonstração e serão substituídas pelo catálogo oficial.</p></div></div></section>;}

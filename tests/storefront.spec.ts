@@ -1,0 +1,32 @@
+import {test,expect} from '@playwright/test';
+test('product, cart quantities, persistence and removal',async({page})=>{
+ await page.goto('/produtos/noite-do-deserto');
+ await page.getByRole('button',{name:'Adicionar ao carrinho'}).click();
+ await page.getByRole('link',{name:'Ver carrinho →'}).click();
+ await expect(page.getByText('R$ 289,00',{exact:true})).toHaveCount(2);
+ await page.getByRole('button',{name:'Aumentar quantidade de Noite do Deserto'}).click();
+ await expect(page.getByText('R$ 578,00',{exact:true})).toHaveCount(2);
+ await page.reload();
+ await expect(page.getByText('R$ 578,00',{exact:true})).toHaveCount(2);
+ await page.getByRole('button',{name:'Diminuir quantidade de Noite do Deserto'}).click();
+ await expect(page.getByText('R$ 289,00',{exact:true})).toHaveCount(2);
+ await page.getByRole('button',{name:'Remover Noite do Deserto'}).click();
+ await expect(page.getByText('Seu carrinho ainda está vazio.')).toBeVisible();
+});
+test('category filtering and responsive layout',async({page})=>{
+ await page.goto('/catalogo?categoria=feminino');
+ await expect(page.getByRole('heading',{name:'Rosa de Damasco'})).toBeVisible();
+ await expect(page.getByRole('heading',{name:'Oud Imperial'})).toHaveCount(0);
+ await page.getByRole('button',{name:'Kits',exact:true}).click();
+ await expect(page.getByRole('heading',{name:'Ritual Layal'})).toBeVisible();
+ await page.goto('/');
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
+ await page.getByRole('link',{name:'Descubra seu perfume'}).click();
+ await expect(page.getByRole('heading',{name:'Uma essência para cada história.'})).toBeVisible();
+});
+test('quiz placeholder and missing products',async({page})=>{
+ await page.goto('/quiz');
+ await expect(page.getByText('EM BREVE · EXPERIÊNCIA LAYAL')).toBeVisible();
+ const response=await page.goto('/produtos/inexistente');
+ expect(response?.status()).toBe(404);
+});
