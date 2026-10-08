@@ -30,8 +30,21 @@ test('quiz placeholder and missing products',async({page})=>{
  const response=await page.goto('/produtos/inexistente');
  expect(response?.status()).toBe(404);
 });
-test('visual evidence of the home page',async({page},testInfo)=>{
+test('visual evidence of storefront pages',async({page},testInfo)=>{
  await page.goto('/');
  await expect(page.getByRole('heading',{name:'A essência do extraordinário.'})).toBeVisible();
+ await page.evaluate(()=>document.fonts.ready);
  await page.screenshot({path:testInfo.outputPath('home.png'),fullPage:true});
+ await page.goto('/catalogo');
+ await expect(page.getByRole('heading',{name:'Nossa coleção.'})).toBeVisible();
+ await expect(page.getByRole('heading',{name:'Ritual Layal'})).toBeVisible();
+ await page.screenshot({path:testInfo.outputPath('catalogo.png'),fullPage:true});
+ await page.goto('/produtos/noite-do-deserto');
+ await expect(page.getByRole('button',{name:'Adicionar ao carrinho'})).toBeEnabled();
+ await page.screenshot({path:testInfo.outputPath('produto.png'),fullPage:true});
+ await page.getByRole('button',{name:'Adicionar ao carrinho'}).click();
+ await page.getByRole('link',{name:'Ver carrinho →'}).click();
+ await expect(page.getByRole('heading',{name:'Noite do Deserto'})).toBeVisible();
+ await expect(page.getByText('R$ 289,00',{exact:true})).toHaveCount(2);
+ await page.screenshot({path:testInfo.outputPath('carrinho.png'),fullPage:true});
 });
